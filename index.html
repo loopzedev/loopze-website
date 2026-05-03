@@ -3,14 +3,97 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LOOPZE — Industrial Flow Automation</title>
+
+<title>Loopze — Industrial Flow Automation Runtime</title>
+<meta name="description" content="Industrial flow automation runtime. One Go binary, native MQTT, Modbus and OPC-UA. Visual flows for the industrial edge — no install ceremony." />
+<meta name="theme-color" content="#FFBF00" />
+<meta name="author" content="Loopze" />
+<meta name="keywords" content="industrial flow automation, visual flow programming, MQTT, Modbus, OPC-UA, edge runtime, Go, single binary, NATS, industrial IoT, Node-RED alternative" />
+
+<link rel="canonical" href="https://loopze.dev/" />
+
+<!-- Favicons & manifest -->
+<link rel="icon" type="image/svg+xml" href="/public/logo.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/public/favicon.ico" />
+<link rel="manifest" href="/public/site.webmanifest" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://loopze.dev/" />
+<meta property="og:site_name" content="Loopze" />
+<meta property="og:title" content="Loopze — Industrial Flow Automation Runtime" />
+<meta property="og:description" content="Visual flow programming for the industrial edge. One Go binary with goroutine-per-node parallelism, native MQTT, Modbus and OPC-UA. Drag-and-drop signal flows — without the node_modules." />
+<meta property="og:image" content="https://loopze.dev/public/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Loopze — industrial flow automation runtime" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://loopze.dev/" />
+<meta name="twitter:title" content="Loopze — Industrial Flow Automation Runtime" />
+<meta name="twitter:description" content="Visual flow programming for the industrial edge. One Go binary, native MQTT, Modbus and OPC-UA. No install ceremony." />
+<meta name="twitter:image" content="https://loopze.dev/public/og-image.png" />
+<meta name="twitter:image:alt" content="Loopze — industrial flow automation runtime" />
+
+<!-- Robots -->
+<meta name="robots" content="index, follow, max-image-preview:large" />
+
+<!-- Fonts & styles -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&family=Fraunces:wght@500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+
+<!-- Structured data: SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Loopze",
+  "alternateName": "Loopze Edge",
+  "url": "https://loopze.dev/",
+  "description": "Industrial flow automation runtime. One Go binary with native MQTT, Modbus and OPC-UA, embedded NATS broker, and goroutine-per-node parallelism. Visual flows for the industrial edge.",
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Industrial Automation",
+  "operatingSystem": "Linux, macOS, Windows",
+  "downloadUrl": "https://github.com/loopzedev/loopze-edge/releases/latest",
+  "softwareHelp": "https://loopze.dev/",
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "image": "https://loopze.dev/public/og-image.png",
+  "author": {
+    "@type": "Organization",
+    "name": "Loopze",
+    "url": "https://loopze.dev/"
+  }
+}
+</script>
 </head>
 <body>
-<div id="root"></div>
+<div id="root">
+  <noscript>
+    <main style="max-width:720px;margin:0 auto;padding:4rem 1.5rem;font-family:system-ui,-apple-system,sans-serif;color:#e8e8e0;background:#1a1a0e;line-height:1.6;">
+      <h1>Loopze — Visual flow programming, rebuilt for the industrial edge.</h1>
+      <p>One Go binary. Goroutine-per-node parallelism. Native MQTT, Modbus and OPC-UA. Write transforms in Go, JavaScript or expr-lang — drag-and-drop signal flows for engineers who think in MQTT topics, Modbus registers and OPC-UA nodes.</p>
+      <p>Built in Go for true parallelism, native industrial protocols and zero install ceremony.</p>
+      <h2>Get Loopze</h2>
+      <ul>
+        <li><a href="https://github.com/loopzedev/loopze-edge/releases/latest" style="color:#FFBF00;">Download the latest binary from GitHub</a></li>
+        <li>Or install via shell: <code>curl -L loopze.dev/install | sh</code></li>
+      </ul>
+      <p><em>This page is best viewed with JavaScript enabled.</em></p>
+    </main>
+  </noscript>
+</div>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
