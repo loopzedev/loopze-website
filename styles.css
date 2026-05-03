@@ -810,3 +810,237 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   color: var(--lz-accent);
   font-weight: 700;
 }
+
+/* =====================================================
+   Mobile / Tablet
+   ===================================================== */
+
+/* ───── Tablet ≤ 960px ───── */
+@media (max-width: 960px) {
+  .lz-shell { padding: 0 24px; }
+
+  /* type scale down a notch */
+  .lz-h1 { font-size: 48px; }
+  .lz-h2 { font-size: 34px; }
+
+  /* Hero: split layouts collapse to single column */
+  .lz-hero { padding: 56px 0 64px; }
+  .lz-hero-split,
+  .lz-hero-terminal {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  /* Why grid: 2 → 1 column at this breakpoint stays 2,
+     but the spotlight collapses */
+  .lz-spot {
+    grid-template-columns: 100px 1fr;
+    gap: 24px 28px;
+    padding: 28px 28px;
+  }
+  .lz-spot-right {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 24px;
+    padding-left: 0;
+    padding-top: 20px;
+    border-left: 0;
+    border-top: 1px solid var(--lz-border);
+  }
+  .lz-spot-stat-num { font-size: 32px; }
+
+  /* Compare table: keep 3 cols but tighten the key */
+  .lz-cmp-head, .lz-cmp-row {
+    grid-template-columns: 130px 1fr 1fr;
+  }
+
+  /* Footer: 4 → 2 columns */
+  .lz-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 24px;
+  }
+
+  /* Features: 3 → 2 */
+  .lz-feat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Protocols: 4 → 2 */
+  .lz-protos-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ───── Mobile ≤ 640px ───── */
+@media (max-width: 640px) {
+  .lz-shell { padding: 0 18px; }
+
+  /* ── Nav: collapse to brand + a single CTA ── */
+  .lz-nav {
+    height: 52px;
+    padding: 0 18px;
+    gap: 8px;
+  }
+  .lz-nav-left { gap: 10px; }
+  .lz-nav-right { gap: 10px; }
+  .lz-nav-links,
+  .lz-nav-status,
+  .lz-nav-gh,
+  .lz-nav-sep,
+  .lz-brand-ver { display: none; }
+  .lz-brand-name { font-size: 12px; letter-spacing: 0.16em; }
+
+  /* ── Type ── */
+  .lz-h1 { font-size: 36px; line-height: 1.08; }
+  .lz-h2 { font-size: 28px; line-height: 1.15; }
+  .lz-sub { font-size: 15px; max-width: none; }
+
+  /* ── Hero ── */
+  .lz-hero { padding: 36px 0 48px; }
+  .lz-hero-split,
+  .lz-hero-terminal {
+    gap: 32px;
+  }
+  .lz-hero-centered { text-align: left; align-items: flex-start; }
+  .lz-h1-center { text-align: left; }
+  .lz-sub-center { text-align: left; margin-left: 0; }
+
+  /* CTAs go full-width-ish */
+  .lz-ctas { gap: 10px; }
+  .lz-ctas .lz-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+  }
+
+  /* Build/protocols meta strip — single column, tight */
+  .lz-meta {
+    grid-template-columns: 1fr;
+    margin-top: 24px;
+    gap: 6px;
+  }
+
+  /* ── FlowMock: scale the whole thing to fit ── */
+  /* The mock is absolutely-positioned at fixed coords
+     (≈760×320). Wrap-scale it down to fit the viewport. */
+  .lz-hero-right,
+  .lz-hero-mock-wide {
+    margin-left: -18px;
+    margin-right: -18px;
+    overflow: hidden;
+  }
+  .lz-flow {
+    transform: scale(0.62);
+    transform-origin: top left;
+    width: 162%;          /* 1 / 0.62 to compensate */
+  }
+  .lz-flow-canvas { height: 240px; }
+  /* Hide the rightmost flow tabs that wouldn't fit */
+  .lz-flow-tab:nth-child(n+3) { display: none; }
+
+  /* Terminal card */
+  .lz-term-line { font-size: 11px; }
+
+  /* ── Why section ── */
+  .lz-why-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .lz-why-card { padding: 22px 22px 20px; }
+  .lz-why-title { font-size: 19px; }
+
+  .lz-spot {
+    grid-template-columns: 1fr;
+    padding: 24px 22px;
+  }
+  .lz-spot-left {
+    flex-direction: row;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .lz-spot-title { font-size: 22px; }
+  .lz-spot-body { font-size: 13.5px; }
+  .lz-spot-right {
+    flex-wrap: wrap;
+    gap: 18px 28px;
+    padding-top: 18px;
+  }
+  .lz-spot-stat-num { font-size: 28px; }
+
+  /* ── Compare table → stacked card per row ── */
+  .lz-cmp { padding: 0; background: transparent; border: 0; }
+  .lz-cmp-head {
+    display: none;        /* header columns make no sense stacked */
+  }
+  .lz-cmp-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 16px;
+    background: var(--lz-surface);
+    border: 1px solid var(--lz-border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .lz-cmp-row .lz-cmp-key {
+    font-size: 10px;
+  }
+  .lz-cmp-row .lz-cmp-a {
+    font-size: 13px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--lz-border);
+  }
+  .lz-cmp-row .lz-cmp-a::before {
+    content: 'elsewhere · ';
+    font-family: var(--lz-font-mono); font-size: 10px;
+    color: var(--lz-text-faint);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .lz-cmp-row .lz-cmp-b {
+    font-size: 13px;
+    padding-top: 4px;
+  }
+  .lz-cmp-row .lz-cmp-b::before {
+    content: 'loopze · ';
+    font-family: var(--lz-font-mono); font-size: 10px;
+    color: var(--lz-accent);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-right: 4px;
+  }
+
+  /* ── Features ── */
+  .lz-feat-grid { grid-template-columns: 1fr; }
+  .lz-feat { padding: 24px 22px 22px; }
+
+  /* ── Protocols ── */
+  .lz-protos-row { grid-template-columns: 1fr; }
+
+  /* ── Footer ── */
+  .lz-footer-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .lz-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 18px;
+  }
+  .lz-footer-foot {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  /* Section heads */
+  .lz-section-head { margin-bottom: 32px; }
+}
+
+/* ───── Very small ≤ 380px — last-mile fixes ───── */
+@media (max-width: 380px) {
+  .lz-h1 { font-size: 30px; }
+  .lz-h2 { font-size: 24px; }
+  .lz-flow { transform: scale(0.52); width: 192%; }
+  .lz-flow-canvas { height: 200px; }
+}
