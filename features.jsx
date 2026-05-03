@@ -164,7 +164,7 @@ function ProtoStrip() {
     { k: 'Cron',     v: 'parsed by cronstrue' },
   ];
   return (
-    <div className="lz-protos">
+    <div className="lz-protos" id="protocols">
       <div className="lz-protos-label lz-mono">// protocols out of the box</div>
       <div className="lz-protos-row">
         {items.map((p) => (

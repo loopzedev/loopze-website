@@ -21,8 +21,8 @@ function TopNav() {
         <ul className="lz-nav-links">
           <li><a href="#features">Features</a></li>
           <li><a href="#protocols">Protocols</a></li>
-          <li><a href="#runtime">Runtime</a></li>
-          <li><a href="#download">Download</a></li>
+          <li><a href="#why">Why</a></li>
+          <li><a href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">Download</a></li>
         </ul>
       </div>
       <div className="lz-nav-right">
@@ -33,7 +33,7 @@ function TopNav() {
         <a className="lz-nav-gh lz-mono" href="https://github.com/loopzedev/loopze-edge" target="_blank" rel="noreferrer">
           <span>github</span>
         </a>
-        <a className="lz-btn lz-btn-primary lz-btn-sm" href="#download">Download</a>
+        <a className="lz-btn lz-btn-primary lz-btn-sm" href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">Download</a>
       </div>
     </nav>
   );

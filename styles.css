@@ -117,6 +117,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .lz-dot-red    { background: var(--lz-red);    box-shadow: 0 0 6px var(--lz-red); }
 .lz-dot-blue   { background: var(--lz-blue);   box-shadow: 0 0 6px var(--lz-blue); }
 
+/* anchor scroll offset to clear the 56px sticky nav */
+[id] { scroll-margin-top: 72px; }
+
 /* nav */
 .lz-nav {
   position: sticky; top: 0; z-index: 30;
