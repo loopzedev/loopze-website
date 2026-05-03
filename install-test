@@ -1,0 +1,170 @@
+#!/bin/sh
+# Loopze installer — https://loopze.dev
+#
+# Usage:
+#   curl -L loopze.dev/install | sh
+#
+# Environment overrides:
+#   LOOPZE_VERSION       install a specific tag (default: latest release)
+#   LOOPZE_INSTALL_DIR   target directory (default: ~/.local/bin, or
+#                        /usr/local/bin when running as root)
+#   LOOPZE_REPO          override the GitHub repo (default: loopzedev/loopze-edge)
+#
+set -eu
+
+REPO="${LOOPZE_REPO:-loopzedev/loopze-edge}"
+VERSION="${LOOPZE_VERSION:-}"
+
+# ── output helpers ───────────────────────────────────────────────
+if [ -t 2 ]; then
+  C_R="$(printf '\033[0m')"
+  C_B="$(printf '\033[1m')"
+  C_DIM="$(printf '\033[2m')"
+  C_BLUE="$(printf '\033[34m')"
+  C_GREEN="$(printf '\033[32m')"
+  C_YELLOW="$(printf '\033[33m')"
+  C_RED="$(printf '\033[31m')"
+else
+  C_R=""; C_B=""; C_DIM=""; C_BLUE=""; C_GREEN=""; C_YELLOW=""; C_RED=""
+fi
+
+info() { printf '%s::%s %s\n' "${C_BLUE}${C_B}" "${C_R}" "$1" >&2; }
+ok()   { printf '%s✓%s  %s\n'  "${C_GREEN}${C_B}" "${C_R}" "$1" >&2; }
+warn() { printf '%s!%s  %s\n'  "${C_YELLOW}${C_B}" "${C_R}" "$1" >&2; }
+err()  { printf '%s✗%s  %s\n'  "${C_RED}${C_B}"   "${C_R}" "$1" >&2; }
+die()  { err "$1"; exit 1; }
+
+need() {
+  command -v "$1" >/dev/null 2>&1 || die "required tool not found: $1"
+}
+
+need curl
+need tar
+need uname
+
+# ── detect platform ──────────────────────────────────────────────
+os_raw=$(uname -s 2>/dev/null || echo unknown)
+arch_raw=$(uname -m 2>/dev/null || echo unknown)
+
+case "$os_raw" in
+  Linux*)               OS=linux ;;
+  Darwin*)              OS=darwin ;;
+  MINGW*|MSYS*|CYGWIN*) OS=windows ;;
+  *) die "unsupported operating system: $os_raw" ;;
+esac
+
+case "$arch_raw" in
+  x86_64|amd64)         ARCH=amd64 ;;
+  aarch64|arm64)        ARCH=arm64 ;;
+  armv7*|armv6*)        ARCH=armv7 ;;
+  *) die "unsupported architecture: $arch_raw" ;;
+esac
+
+info "platform: ${C_B}${OS}/${ARCH}${C_R}"
+
+# ── resolve version ──────────────────────────────────────────────
+if [ -z "$VERSION" ]; then
+  info "resolving latest release from ${C_DIM}${REPO}${C_R}"
+  api="https://api.github.com/repos/${REPO}/releases/latest"
+  # parse tag_name without jq
+  VERSION=$(curl -fsSL \
+              -H 'Accept: application/vnd.github+json' \
+              "$api" 2>/dev/null \
+            | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+            | head -n1)
+  [ -n "$VERSION" ] || die "could not resolve latest version (rate-limited? try LOOPZE_VERSION=v...)"
+fi
+VER_NUM="${VERSION#v}"
+info "version:  ${C_B}${VERSION}${C_R}"
+
+# ── decide install dir ───────────────────────────────────────────
+if [ -n "${LOOPZE_INSTALL_DIR:-}" ]; then
+  INSTALL_DIR="$LOOPZE_INSTALL_DIR"
+elif [ "$(id -u)" = "0" ]; then
+  INSTALL_DIR="/usr/local/bin"
+else
+  INSTALL_DIR="${HOME}/.local/bin"
+fi
+mkdir -p "$INSTALL_DIR" || die "cannot create install dir: $INSTALL_DIR"
+[ -w "$INSTALL_DIR" ] || die "install dir not writable: $INSTALL_DIR (try sudo, or set LOOPZE_INSTALL_DIR)"
+
+# ── pick asset name ──────────────────────────────────────────────
+#   convention: loopze-edge_<version-without-v>_<os>_<arch>.<ext>
+#   (matches the loopze-edge release pipeline; archive prefix tracks
+#   the repo name, but the installed binary is always 'loopze'.)
+EXT="tar.gz"
+BIN_NAME="loopze"
+if [ "$OS" = "windows" ]; then
+  EXT="zip"
+  BIN_NAME="loopze.exe"
+fi
+ASSET="loopze-edge_${VER_NUM}_${OS}_${ARCH}.${EXT}"
+URL="http://localhost:8765/${ASSET}"
+
+# ── download ─────────────────────────────────────────────────────
+TMP=$(mktemp -d 2>/dev/null || mktemp -d -t loopze-install) \
+  || die "could not create temp dir"
+trap 'rm -rf "$TMP"' EXIT INT TERM HUP
+
+info "downloading ${C_DIM}${ASSET}${C_R}"
+if ! curl -fL --retry 3 -# -o "${TMP}/${ASSET}" "$URL"; then
+  err "download failed: $URL"
+  die "no asset for ${OS}/${ARCH} in ${VERSION}? (open an issue at https://github.com/${REPO}/issues)"
+fi
+
+# ── extract ──────────────────────────────────────────────────────
+info "extracting"
+case "$EXT" in
+  tar.gz)
+    tar -xzf "${TMP}/${ASSET}" -C "$TMP" \
+      || die "tar extraction failed"
+    ;;
+  zip)
+    need unzip
+    unzip -q "${TMP}/${ASSET}" -d "$TMP" \
+      || die "unzip extraction failed"
+    ;;
+esac
+
+# find the binary — accept either 'loopze' or 'loopze-edge'
+# (Windows variants append .exe). Always installed as 'loopze'.
+if [ "$OS" = "windows" ]; then
+  CANDIDATES="loopze.exe loopze-edge.exe"
+else
+  CANDIDATES="loopze loopze-edge"
+fi
+SRC=""
+for cand in $CANDIDATES; do
+  SRC=$(find "$TMP" -type f -name "$cand" 2>/dev/null | head -n1)
+  [ -n "$SRC" ] && break
+done
+[ -n "$SRC" ] || die "no loopze binary found inside ${ASSET}"
+
+# ── install ──────────────────────────────────────────────────────
+DEST="${INSTALL_DIR}/${BIN_NAME}"
+mv -f "$SRC" "$DEST"
+chmod +x "$DEST"
+ok "installed ${C_B}${BIN_NAME} ${VERSION}${C_R} → ${DEST}"
+
+# ── PATH hint ────────────────────────────────────────────────────
+case ":${PATH}:" in
+  *":${INSTALL_DIR}:"*) ;;
+  *)
+    warn "${INSTALL_DIR} is not on your PATH"
+    printf '   add this to your shell profile:\n' >&2
+    printf '     %sexport PATH="%s:$PATH"%s\n' "${C_B}" "$INSTALL_DIR" "${C_R}" >&2
+    ;;
+esac
+
+# ── verify ───────────────────────────────────────────────────────
+printf '\n   %s$ loopze --version%s\n' "${C_DIM}" "${C_R}" >&2
+if "$DEST" --version >/tmp/.loopze-ver 2>&1; then
+  sed 's/^/     /' /tmp/.loopze-ver >&2
+  rm -f /tmp/.loopze-ver
+else
+  rm -f /tmp/.loopze-ver
+  warn "could not run '${BIN_NAME} --version' (may still be functional)"
+fi
+
+printf '\n%sdone.%s run %sloopze --help%s to get started.\n' \
+  "${C_GREEN}${C_B}" "${C_R}" "${C_B}" "${C_R}" >&2
