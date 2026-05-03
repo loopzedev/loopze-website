@@ -25,7 +25,7 @@ function Eyebrow({ children }) {
 function CTAs() {
   return (
     <div className="lz-ctas">
-      <a className="lz-btn lz-btn-primary" href="#download">
+      <a className="lz-btn lz-btn-primary" href="https://github.com/loopzedev/loopze-edge/releases/latest">
         <span>Download binary</span>
         <span className="lz-btn-arrow">→</span>
       </a>
