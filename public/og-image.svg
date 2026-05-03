@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#161a1f"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#ffffff" fill-opacity="0.04"/>
+    </pattern>
+    <linearGradient id="bolt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7eb8ff"/>
+      <stop offset="1" stop-color="#3d8bfd"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Top-left brand -->
+  <g transform="translate(72, 72)">
+    <!-- mini lightning bolt -->
+    <g transform="scale(2.2)">
+      <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="url(#bolt)"/>
+    </g>
+    <text x="72" y="35" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="32" font-weight="700" fill="#e8e8e0" letter-spacing="2">LOOPZE</text>
+  </g>
+
+  <!-- Eyebrow -->
+  <g transform="translate(72, 215)">
+    <circle cx="6" cy="-8" r="6" fill="#FFBF00"/>
+    <text x="22" y="0" font-family="'IBM Plex Mono', 'SF Mono', 'Menlo', 'Consolas', monospace" font-size="22" font-weight="500" fill="#FFBF00" letter-spacing="3">INDUSTRIAL · FLOW · AUTOMATION</text>
+  </g>
+
+  <!-- Headline -->
+  <g transform="translate(72, 320)">
+    <text x="0" y="0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="80" font-weight="700" fill="#f5f5ee" letter-spacing="-2">
+      <tspan x="0" dy="0">Visual flows for the</tspan>
+      <tspan x="0" dy="92">industrial </tspan><tspan fill="#7eb8ff">edge</tspan><tspan>.</tspan>
+    </text>
+  </g>
+
+  <!-- Subline -->
+  <g transform="translate(72, 500)">
+    <text x="0" y="0" font-family="'IBM Plex Mono', 'SF Mono', 'Menlo', 'Consolas', monospace" font-size="26" font-weight="400" fill="#a8a89c">One Go binary · MQTT · Modbus · OPC-UA</text>
+  </g>
+
+  <!-- CTA bottom-right -->
+  <g transform="translate(900, 530)">
+    <rect x="0" y="0" width="228" height="58" rx="29" fill="#FFBF00"/>
+    <text x="114" y="38" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="700" fill="#1a1a0e" text-anchor="middle">loopze.dev →</text>
+  </g>
+
+  <!-- Subtle accent line bottom-left -->
+  <rect x="72" y="588" width="60" height="3" fill="#FFBF00" rx="1.5"/>
+</svg>
