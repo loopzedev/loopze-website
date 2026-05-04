@@ -22,6 +22,7 @@ function TopNav() {
           <li><a href="#features">Features</a></li>
           <li><a href="#protocols">Protocols</a></li>
           <li><a href="#why">Why</a></li>
+          <li><a href="https://docs.loopze.dev/">Docs</a></li>
           <li><a href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">Download</a></li>
         </ul>
       </div>
@@ -53,7 +54,13 @@ function Footer() {
       </div>
       <div className="lz-footer-grid">
         <FooterCol title="Product"
-                   items={['Editor', 'Runtime', 'Nodes', 'Changelog']} />
+                   items={[
+                     'Editor',
+                     'Runtime',
+                     'Nodes',
+                     { label: 'Documentation', href: 'https://docs.loopze.dev/' },
+                     'Changelog',
+                   ]} />
         <FooterCol title="Protocols"
                    items={['MQTT', 'Modbus', 'OPC-UA', 'Serial']} />
         <FooterCol title="Source"
@@ -74,7 +81,11 @@ function FooterCol({ title, items }) {
     <div className="lz-footer-col">
       <div className="lz-footer-col-title lz-mono lz-tdim">{title.toLowerCase()}</div>
       <ul>
-        {items.map((i) => <li key={i}><a href="#">{i}</a></li>)}
+        {items.map((i) => {
+          const obj = typeof i === 'string' ? { label: i, href: '#' } : i;
+          const ext = obj.external ? { target: '_blank', rel: 'noreferrer' } : {};
+          return <li key={obj.label}><a href={obj.href} {...ext}>{obj.label}</a></li>;
+        })}
       </ul>
     </div>
   );
