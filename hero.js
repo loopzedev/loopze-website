@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 // Hero — three layouts driven by tweak.heroLayout
 const {
   useState,
@@ -443,3 +444,4 @@ function TerminalCard() {
 Object.assign(window, {
   Hero
 });
+})();

@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 // Feature grid — 6 features in a 3-col layout, with monospace meta lines
 const FEATURES = [{
   id: '01',
@@ -289,3 +290,4 @@ function ProtoStrip() {
 Object.assign(window, {
   Features
 });
+})();

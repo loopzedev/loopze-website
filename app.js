@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 // App entry — composes nav + hero + features + footer with tweak state
 const {
   useEffect,
@@ -114,3 +115,4 @@ function App() {
   })));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+})();

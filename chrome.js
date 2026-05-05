@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 // Top nav + footer + logo
 
@@ -130,3 +131,4 @@ Object.assign(window, {
   Footer,
   Logo
 });
+})();

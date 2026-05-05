@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 // tweaks-panel.jsx
 // Reusable Tweaks shell + form-control helpers.
 //
@@ -523,3 +524,4 @@ Object.assign(window, {
   TweakColor,
   TweakButton
 });
+})();

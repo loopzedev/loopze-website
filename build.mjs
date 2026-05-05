@@ -15,6 +15,13 @@ import { readdir, readFile, writeFile, stat } from 'node:fs/promises';
 
 const BANNER = '// AUTO-GENERATED from the matching .jsx file — do not edit by hand.\n// Run `npm run build` after editing the .jsx source.\n';
 
+// Wrap each file's body in an IIFE so top-level `const`/`let` declarations
+// (e.g. `const { useState, useEffect } = React;` in multiple files) do not
+// collide in the shared classic-script scope. Components are still exposed
+// to other scripts via the explicit `Object.assign(window, {...})` lines.
+const IIFE_OPEN  = ';(function () {\n';
+const IIFE_CLOSE = '\n})();\n';
+
 async function listJsx() {
   const entries = await readdir('.', { withFileTypes: true });
   return entries
@@ -34,7 +41,7 @@ async function buildOne(file) {
     comments: true,
   });
   const out = file.replace(/\.jsx$/, '.js');
-  await writeFile(out, BANNER + code);
+  await writeFile(out, BANNER + IIFE_OPEN + code + IIFE_CLOSE);
   return { in: file, out, bytes: code.length };
 }
 

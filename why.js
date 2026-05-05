@@ -1,5 +1,6 @@
 // AUTO-GENERATED from the matching .jsx file — do not edit by hand.
 // Run `npm run build` after editing the .jsx source.
+;(function () {
 // Why Loopze — four headline arguments. Pain (status quo) → Loopze answer.
 
 const WHY = [{
@@ -186,3 +187,4 @@ function CompareTable() {
 Object.assign(window, {
   WhyLoopze
 });
+})();
