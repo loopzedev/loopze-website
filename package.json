@@ -4,12 +4,15 @@
   "private": true,
   "description": "Static marketing site for Loopze. JSX → JS transpiled at build time; no runtime Babel.",
   "scripts": {
-    "build": "node build.mjs",
+    "build": "node build.mjs && node prerender.mjs",
+    "prerender": "node prerender.mjs",
     "watch": "node build.mjs --watch",
-    "serve": "python3 -m http.server 8000"
+    "serve": "python3 -m http.server 8002"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
-    "@babel/preset-react": "^7.26.3"
+    "@babel/preset-react": "^7.26.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

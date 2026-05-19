@@ -88,6 +88,9 @@ function Footer() {
     items: ['Editor', 'Runtime', 'Nodes', {
       label: 'Documentation',
       href: 'https://docs.loopze.dev/'
+    }, {
+      label: 'Node-RED alternative',
+      href: '/node-red-alternative/'
     }, 'Changelog']
   }), /*#__PURE__*/React.createElement(FooterCol, {
     title: "Protocols",

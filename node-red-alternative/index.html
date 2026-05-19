@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Node-RED Alternative — Loopze: One Go Binary, Native Industrial Protocols</title>
+<meta name="description" content="Looking for a Node-RED alternative? Loopze is a single-binary flow runtime with native MQTT, Modbus and OPC-UA, goroutine-per-node parallelism and no node_modules. Open-source (AGPL)." />
+<meta name="theme-color" content="#FFBF00" />
+<meta name="author" content="Loopze" />
+<meta name="keywords" content="Node-RED alternative, Node-RED replacement, industrial flow programming, MQTT runtime, Modbus runtime, OPC-UA runtime, Go flow engine, edge automation, IIoT" />
+
+<link rel="canonical" href="https://loopze.dev/node-red-alternative/" />
+
+<link rel="icon" type="image/svg+xml" href="/public/logo.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/public/favicon.ico" />
+<link rel="manifest" href="/public/site.webmanifest" />
+
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://loopze.dev/node-red-alternative/" />
+<meta property="og:site_name" content="Loopze" />
+<meta property="og:title" content="Node-RED Alternative — Loopze: One Go Binary, Native Industrial Protocols" />
+<meta property="og:description" content="A modern Node-RED alternative for the industrial edge: single Go binary, native MQTT/Modbus/OPC-UA, true parallelism, no node_modules." />
+<meta property="og:image" content="https://loopze.dev/public/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://loopze.dev/node-red-alternative/" />
+<meta name="twitter:title" content="Node-RED Alternative — Loopze" />
+<meta name="twitter:description" content="A modern Node-RED alternative for the industrial edge: single Go binary, native MQTT/Modbus/OPC-UA, true parallelism." />
+<meta name="twitter:image" content="https://loopze.dev/public/og-image.png" />
+
+<meta name="robots" content="index, follow, max-image-preview:large" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Loopze", "item": "https://loopze.dev/" },
+    { "@type": "ListItem", "position": 2, "name": "Node-RED Alternative", "item": "https://loopze.dev/node-red-alternative/" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is Loopze a drop-in replacement for Node-RED?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Loopze is a fresh implementation of the visual-flow idea, not a fork. Flows are not import-compatible with Node-RED's JSON format, but the mental model — nodes, wires, messages — is the same, and the editor will feel familiar. The win is operational: a single Go binary instead of a Node.js install plus node_modules tree."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why pick Loopze over Node-RED for industrial use cases?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Three reasons. (1) Native protocols: MQTT, Modbus and OPC-UA are built into the runtime, not bolted on via community npm packages of varying quality. (2) True parallelism: each node runs in its own goroutine, so a slow Modbus poll does not block your MQTT pipeline. (3) Single-binary deployment: copy one ~5 MB file onto an edge gateway and run it — no Node.js, no npm install, no version drift."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I write custom logic in JavaScript like in Node-RED?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Loopze supports transforms written in JavaScript, expr-lang (a fast expression language) and Go. JavaScript transforms cover the everyday case; expr-lang is great for low-overhead per-message expressions; Go is available when you need maximum performance or to call into existing Go libraries."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Loopze open source?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — AGPL-3.0. Source on GitHub at loopzedev/loopze-edge. A commercial license is available for vendors who want to embed Loopze in closed-source products."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What platforms does Loopze run on?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Linux, macOS and Windows on amd64 and arm64. The single binary is small enough (~5 MB) to ship onto resource-constrained edge gateways and industrial PCs."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<nav class="lz-nav">
+  <div class="lz-nav-left">
+    <a class="lz-brand" href="/">
+      <span class="lz-brand-mark">
+        <svg width="22" height="22" viewBox="1.5 2 20 20" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+      </span>
+      <span class="lz-brand-name">LOOPZE</span>
+      <span class="lz-brand-ver lz-mono">v0.4.1</span>
+    </a>
+    <span class="lz-nav-sep"></span>
+    <ul class="lz-nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#protocols">Protocols</a></li>
+      <li><a href="/#why">Why</a></li>
+      <li><a href="https://docs.loopze.dev/">Docs</a></li>
+      <li><a href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">Download</a></li>
+    </ul>
+  </div>
+  <div class="lz-nav-right">
+    <a class="lz-btn lz-btn-primary lz-btn-sm" href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">Download</a>
+  </div>
+</nav>
+
+<main class="lz-shell" style="max-width:900px;margin:0 auto;padding:3rem 1.5rem 4rem;">
+
+  <nav aria-label="Breadcrumb" style="font-size:0.85rem;opacity:0.6;margin-bottom:1.5rem;">
+    <a href="/" style="color:inherit;">Loopze</a> / Node-RED Alternative
+  </nav>
+
+  <h1 style="font-size:clamp(2rem,5vw,3rem);line-height:1.1;margin:0 0 1rem;">
+    Looking for a <span class="lz-accent-text">Node-RED alternative</span>?<br/>
+    Meet Loopze.
+  </h1>
+
+  <p style="font-size:1.15rem;line-height:1.6;opacity:0.85;margin:0 0 2rem;">
+    Loopze is a modern flow-programming runtime built from the ground up for the
+    industrial edge. One Go binary. Native MQTT, Modbus and OPC-UA. Goroutine-per-node
+    parallelism. No <span class="lz-mono">node_modules</span>, no Node.js install, no
+    community-package supply chain.
+  </p>
+
+  <div class="lz-ctas" style="margin-bottom:3rem;">
+    <a class="lz-btn lz-btn-primary" href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">
+      <span>Download binary</span><span class="lz-btn-arrow">→</span>
+    </a>
+    <a class="lz-btn lz-btn-ghost" href="https://docs.loopze.dev/" target="_blank" rel="noreferrer">
+      <span>Read the docs</span>
+    </a>
+  </div>
+
+  <h2>Why people switch from Node-RED to Loopze</h2>
+
+  <h3>1. Single binary, not a Node.js installation</h3>
+  <p>
+    Node-RED is a fantastic tool, but deploying it to an edge gateway means installing
+    Node.js, managing <span class="lz-mono">npm</span>, pulling down a tree of
+    community modules and hoping the versions still resolve in two years. Loopze ships
+    as one statically-linked Go binary (~5 MB). Copy it, run it, done. No package
+    manager. No transitive dependencies. No silent breakages when a sub-dependency gets
+    yanked.
+  </p>
+
+  <h3>2. Native industrial protocols, not community plugins</h3>
+  <p>
+    In Node-RED, MQTT works well — but Modbus, OPC-UA, S7 and friends rely on
+    community npm packages of varying quality and maintenance. Loopze treats industrial
+    protocols as first-class citizens. MQTT, Modbus (TCP &amp; RTU) and OPC-UA are
+    implemented natively in Go inside the runtime, with consistent semantics,
+    reconnect handling and back-pressure.
+  </p>
+
+  <h3>3. Real parallelism, not a single event loop</h3>
+  <p>
+    Node-RED runs every node on Node.js's single event loop. One slow Modbus poll or
+    blocking transform can stall the entire flow. Loopze runs <strong>each node in its
+    own goroutine</strong>, scheduled across all CPU cores by the Go runtime. A 200 ms
+    Modbus read on one branch does not delay a 1 kHz MQTT pipeline on another.
+  </p>
+
+  <h3>4. Type-safe transforms — Go, JavaScript or expr-lang</h3>
+  <p>
+    Write per-message logic in whichever language fits the job. JavaScript covers the
+    everyday case and feels familiar to Node-RED users. <span class="lz-mono">expr-lang</span>
+    is a fast expression language for one-liners. Go transforms compile into the binary
+    for hot paths where every microsecond counts.
+  </p>
+
+  <h3>5. Built-in NATS broker, no external dependency</h3>
+  <p>
+    Loopze embeds a NATS broker for inter-node messaging and external pub/sub. You can
+    publish flow events out to the rest of your stack — or consume external signals —
+    without standing up Redis, RabbitMQ or a separate broker container.
+  </p>
+
+  <h2 id="comparison">Loopze vs. Node-RED — Quick Comparison</h2>
+
+  <div style="overflow-x:auto;margin:1.5rem 0;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.95rem;">
+      <thead>
+        <tr style="border-bottom:2px solid currentColor;opacity:0.9;">
+          <th style="text-align:left;padding:0.6rem 0.4rem;">&nbsp;</th>
+          <th style="text-align:left;padding:0.6rem 0.4rem;">Loopze</th>
+          <th style="text-align:left;padding:0.6rem 0.4rem;">Node-RED</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Runtime</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Single Go binary (~5 MB)</td>
+          <td style="padding:0.6rem 0.4rem;">Node.js + npm tree</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Concurrency</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Goroutine per node, multi-core</td>
+          <td style="padding:0.6rem 0.4rem;">Single event loop</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>MQTT</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Native, built-in</td>
+          <td style="padding:0.6rem 0.4rem;">Built-in</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Modbus</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Native, first-class</td>
+          <td style="padding:0.6rem 0.4rem;">Community npm package</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>OPC-UA</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Native, first-class</td>
+          <td style="padding:0.6rem 0.4rem;">Community npm package</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Transform languages</strong></td>
+          <td style="padding:0.6rem 0.4rem;">Go, JavaScript, expr-lang</td>
+          <td style="padding:0.6rem 0.4rem;">JavaScript</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Embedded broker</strong></td>
+          <td style="padding:0.6rem 0.4rem;">NATS, built-in</td>
+          <td style="padding:0.6rem 0.4rem;">None (external)</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>Edge deployment</strong></td>
+          <td style="padding:0.6rem 0.4rem;">scp one binary</td>
+          <td style="padding:0.6rem 0.4rem;">Node.js + npm install</td>
+        </tr>
+        <tr style="border-bottom:1px solid currentColor;opacity:0.85;">
+          <td style="padding:0.6rem 0.4rem;"><strong>License</strong></td>
+          <td style="padding:0.6rem 0.4rem;">AGPL-3.0 (+ commercial)</td>
+          <td style="padding:0.6rem 0.4rem;">Apache-2.0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="opacity:0.7;font-size:0.9rem;font-style:italic;">
+    Node-RED is a registered trademark of OpenJS Foundation. This page is an independent
+    comparison written by the Loopze team.
+  </p>
+
+  <h2>When Node-RED is still the right choice</h2>
+  <p>
+    We are not pretending Loopze fits every use case. Stick with Node-RED if:
+  </p>
+  <ul>
+    <li>You rely on a large catalogue of community nodes (smart-home integrations, niche cloud SDKs) that no industrial-focused runtime will ever match.</li>
+    <li>Your team is deeply invested in Node-RED flows that would take months to port.</li>
+    <li>You need IBM/OpenJS commercial support specifically.</li>
+  </ul>
+  <p>
+    Loopze is built for one thing: industrial flow automation at the edge. If that is
+    your use case, the trade-offs above tilt sharply in our direction.
+  </p>
+
+  <h2 id="faq">Frequently Asked Questions</h2>
+
+  <h3>Is Loopze a drop-in replacement for Node-RED?</h3>
+  <p>
+    No. Loopze is a fresh implementation, not a fork. Node-RED flow JSON does not
+    import directly. The <em>mental model</em> is the same — nodes, wires, messages —
+    so anyone who used Node-RED will feel at home, but you will be rebuilding flows in
+    Loopze's editor.
+  </p>
+
+  <h3>Why pick Loopze over Node-RED for industrial use cases?</h3>
+  <p>
+    Native MQTT/Modbus/OPC-UA, true multi-core parallelism, and single-binary
+    deployment. The three together remove most of the friction that shows up when
+    Node-RED leaves the lab and meets a production line.
+  </p>
+
+  <h3>Can I write custom logic in JavaScript like in Node-RED?</h3>
+  <p>
+    Yes. JavaScript transforms work the way you would expect. You can also drop into
+    <span class="lz-mono">expr-lang</span> for fast one-liners or Go for compiled hot
+    paths.
+  </p>
+
+  <h3>Is Loopze open source?</h3>
+  <p>
+    Yes — AGPL-3.0 on
+    <a href="https://github.com/loopzedev/loopze-edge" target="_blank" rel="noreferrer">GitHub</a>.
+    A commercial license is available for closed-source embedding.
+  </p>
+
+  <h3>What platforms does Loopze run on?</h3>
+  <p>
+    Linux, macOS and Windows on amd64 and arm64. The single binary is small enough
+    (~5 MB) to ship onto industrial PCs and ARM gateways.
+  </p>
+
+  <h2>Try Loopze in 60 seconds</h2>
+  <p>Download the latest release or install with one command:</p>
+  <pre style="background:rgba(0,0,0,0.25);padding:1rem;border-radius:6px;overflow-x:auto;"><code class="lz-mono">curl -L loopze.dev/install | sh
+loopze --port 1880</code></pre>
+  <p>Then open <span class="lz-mono">http://localhost:1880</span> and build your first flow.</p>
+
+  <div class="lz-ctas" style="margin-top:2rem;">
+    <a class="lz-btn lz-btn-primary" href="https://github.com/loopzedev/loopze-edge/releases/latest" target="_blank" rel="noreferrer">
+      <span>Download binary</span><span class="lz-btn-arrow">→</span>
+    </a>
+    <a class="lz-btn lz-btn-ghost" href="https://docs.loopze.dev/" target="_blank" rel="noreferrer">
+      <span>Read the docs</span>
+    </a>
+  </div>
+
+</main>
+
+<footer class="lz-footer lz-shell">
+  <div class="lz-footer-row">
+    <div class="lz-footer-brand">
+      <span class="lz-brand-mark">
+        <svg width="22" height="22" viewBox="1.5 2 20 20" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+      </span>
+      <span class="lz-brand-name">LOOPZE</span>
+    </div>
+    <div class="lz-footer-tag lz-mono lz-tdim">
+      // small, hard, reliable. like the stone that sparks the fire.
+    </div>
+  </div>
+  <div class="lz-footer-foot lz-mono lz-tdim">
+    <span>© 2026 Dennis Bleul · AGPL-3.0-or-later</span>
+    <span><a href="/" style="color:inherit;">loopze.dev</a> · <a href="https://docs.loopze.dev/" style="color:inherit;">docs</a> · <a href="https://github.com/loopzedev/loopze-edge" style="color:inherit;">github</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

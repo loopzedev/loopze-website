@@ -59,6 +59,7 @@ function Footer() {
                      'Runtime',
                      'Nodes',
                      { label: 'Documentation', href: 'https://docs.loopze.dev/' },
+                     { label: 'Node-RED alternative', href: '/node-red-alternative/' },
                      'Changelog',
                    ]} />
         <FooterCol title="Protocols"
